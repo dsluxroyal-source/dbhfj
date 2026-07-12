@@ -1,0 +1,27 @@
+from PyPDF2 import PdfMerger
+print("=== PDF Merger Tool ===")
+print("Enter PDF file names one by one.")
+print("Type 'done' when finished.\n")
+pdf_files = []
+while True:
+    file_name = input("PDF file: ")
+    if file_name.lower() == "done":
+        break
+    pdf_files.append(file_name)
+if len(pdf_files) < 2:
+    print("Please provide at least 2 PDF files.")
+else:
+    merger = PdfMerger()
+    try:
+        for pdf in pdf_files:
+            merger.append(pdf)
+        output_name = input("Enter output PDF name: ")
+        if not output_name.endswith(".pdf"):
+            output_name += ".pdf"
+        merger.write(output_name)
+        merger.close()
+        print(f"Merged PDF saved as: {output_name}")
+    except FileNotFoundError:
+        print("Error: One or more PDF files were not found.")
+    except Exception as e:
+        print("Unexpected error:", e)

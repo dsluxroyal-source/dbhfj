@@ -1,0 +1,62 @@
+import tkinter as tk
+from tkinter import messagebox
+import pyperclip
+clipboard_history = []
+def save_clipboard():
+    current_text = pyperclip.paste()
+    if current_text and current_text not in clipboard_history:
+        clipboard_history.append(current_text)
+        update_listbox()
+def update_listbox():
+    history_listbox.delete(0, tk.END)
+    for item in clipboard_history:
+        history_listbox.insert(tk.END, item)
+def copy_selected():
+    try:
+        selected = history_listbox.curselection()[0]
+        text = clipboard_history[selected]
+        pyperclip.copy(text)
+        messagebox.showinfo(
+            "Success",
+            "Copied back to clipboard!"
+        )
+    except:
+        messagebox.showwarning(
+            "Warning",
+            "Please select an item."
+        )
+def clear_history():
+    clipboard_history.clear()
+    update_listbox()
+def check_clipboard():
+    save_clipboard()
+    root.after(1000, check_clipboard)
+root = tk.Tk()
+root.title("Clipboard History App")
+root.geometry("500x400")
+title_label = tk.Label(
+    root,
+    text="Clipboard History",
+    font=("Arial", 16)
+)
+title_label.pack(pady=10)
+history_listbox = tk.Listbox(
+    root,
+    width=60,
+    height=15
+)
+history_listbox.pack(pady=10)
+copy_button = tk.Button(
+    root,
+    text="Copy Selected",
+    command=copy_selected
+)
+copy_button.pack(pady=5)
+clear_button = tk.Button(
+    root,
+    text="Clear History",
+    command=clear_history
+)
+clear_button.pack(pady=5)
+check_clipboard()
+root.mainloop()

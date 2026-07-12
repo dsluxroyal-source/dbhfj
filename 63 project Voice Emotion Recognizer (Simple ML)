@@ -1,0 +1,41 @@
+import sounddevice as sd
+from scipy.io.wavfile import write
+import librosa
+import numpy as np
+import joblib
+MODEL_FILE = "emotion_model.pkl"
+LABEL_FILE = "label_encoder.pkl"
+model = joblib.load(MODEL_FILE)
+label_encoder = joblib.load(LABEL_FILE)
+duration = 3
+sample_rate = 22050
+print("Voice Emotion Recognizer")
+print("Speak after the countdown...")
+while True:
+    choice = input("\nPress Enter to record or type 'exit': ").lower()
+    if choice == "exit":
+        print("Goodbye!")
+        break
+    print("Recording...")
+    audio = sd.rec(
+        int(duration * sample_rate),
+        samplerate=sample_rate,
+        channels=1,
+        dtype="float32"
+    )
+    sd.wait()
+    write(
+        "voice.wav",
+        sample_rate,
+        (audio * 32767).astype(np.int16)
+    )
+    signal, sr = librosa.load("voice.wav", sr=sample_rate)
+    mfcc = librosa.feature.mfcc(
+        y=signal,
+        sr=sr,
+        n_mfcc=40
+    )
+    features = np.mean(mfcc.T, axis=0).reshape(1, -1)
+    prediction = model.predict(features)
+    emotion = label_encoder.inverse_transform(prediction)[0]
+    print(f"Detected Emotion: {emotion}")

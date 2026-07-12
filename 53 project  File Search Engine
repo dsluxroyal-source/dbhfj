@@ -1,0 +1,28 @@
+def search_file():
+    filename = input("Enter file name: ")
+    keyword = input("Enter keyword to search: ").lower()
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            found = False
+            for line_number, line in enumerate(file, start=1):
+                if keyword in line.lower():
+                    print(f"Line {line_number}: {line.strip()}")
+                    found = True
+            if not found:
+                print("Keyword not found.")
+    except FileNotFoundError:
+        print("File not found.")
+    except Exception as e:
+        print("Error:", e)
+while True:
+    print("\n=== FILE SEARCH ENGINE ===")
+    print("1. Search File")
+    print("2. Exit")
+    choice = input("Choose option: ")
+    if choice == "1":
+        search_file()
+    elif choice == "2":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

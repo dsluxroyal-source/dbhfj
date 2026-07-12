@@ -1,0 +1,56 @@
+import os
+FILE_NAME = "patterns.txt"
+patterns = {}
+def load_patterns():
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            for line in file:
+                command, count = line.strip().split("|")
+                patterns[command] = int(count)
+def save_patterns():
+    with open(FILE_NAME, "w", encoding="utf-8") as file:
+        for command, count in patterns.items():
+            file.write(f"{command}|{count}\n")
+def use_command():
+    command = input("Enter Command: ").strip().lower()
+    if command in patterns:
+        patterns[command] += 1
+    else:
+        patterns[command] = 1
+    save_patterns()
+    print("Command recorded.")
+def view_history():
+    if not patterns:
+        print("No command history found.")
+        return
+    print("\n===== COMMAND HISTORY =====")
+    for command, count in patterns.items():
+        print(f"{command} --> {count} time(s)")
+def favorite_command():
+    if not patterns:
+        print("No data available.")
+        return
+    best = max(patterns, key=patterns.get)
+    print("\nMost Used Command")
+    print("-----------------")
+    print("Command :", best)
+    print("Used    :", patterns[best], "time(s)")
+load_patterns()
+while True:
+    print("\n===== JARVIS LEARNS YOUR PATTERNS =====")
+    print("1. Use Command")
+    print("2. View History")
+    print("3. Favorite Command")
+    print("4. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        use_command()
+    elif choice == "2":
+        view_history()
+    elif choice == "3":
+        favorite_command()
+    elif choice == "4":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

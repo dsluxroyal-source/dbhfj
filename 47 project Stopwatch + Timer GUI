@@ -1,0 +1,58 @@
+import tkinter as tk
+running = False
+seconds = 0
+timer_job = None
+
+def update_stopwatch():
+    global seconds, timer_job
+    if running:
+        seconds += 1
+        hrs = seconds // 3600
+        mins = (seconds % 3600) // 60
+        secs = seconds % 60
+        time_label.config(text=f"{hrs:02}:{mins:02}:{secs:02}")
+        timer_job = root.after(1000, update_stopwatch)
+def start_stopwatch():
+    global running
+    if not running:
+        running = True
+        update_stopwatch()
+def stop_stopwatch():
+    global running
+    running = False
+def reset_stopwatch():
+    global seconds, running
+    running = False
+    seconds = 0
+    time_label.config(text="00:00:00")
+def start_timer():
+    try:
+        total = int(timer_entry.get())
+        countdown(total)
+    except ValueError:
+        time_label.config(text="Enter Seconds")
+def countdown(time_left):
+    global timer_job
+    mins = time_left // 60
+    secs = time_left % 60
+    time_label.config(text=f"{mins:02}:{secs:02}")
+    if time_left > 0:
+        timer_job = root.after(1000, countdown, time_left - 1)
+    else:
+        time_label.config(text="Time Up!")
+root = tk.Tk()
+root.title("Stopwatch + Timer")
+root.geometry("350x300")
+time_label = tk.Label(root, text="00:00:00", font=("Arial", 24))
+time_label.pack(pady=20)
+start_btn = tk.Button(root, text="Start Stopwatch", command=start_stopwatch)
+start_btn.pack(pady=5)
+stop_btn = tk.Button(root, text="Stop Stopwatch", command=stop_stopwatch)
+stop_btn.pack(pady=5)
+reset_btn = tk.Button(root, text="Reset Stopwatch", command=reset_stopwatch)
+reset_btn.pack(pady=5)
+timer_entry = tk.Entry(root)
+timer_entry.pack(pady=10)
+timer_btn = tk.Button(root, text="Start Timer", command=start_timer)
+timer_btn.pack(pady=5)
+root.mainloop()

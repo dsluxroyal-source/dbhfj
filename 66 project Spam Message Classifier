@@ -1,0 +1,42 @@
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+messages = [
+    "Congratulations! You won a free iPhone",
+    "Claim your prize now",
+    "Win cash today",
+    "Limited time offer",
+    "Call me when you arrive",
+    "Let's study together",
+    "Meeting starts at 10 AM",
+    "See you tomorrow",
+    "Happy Birthday",
+    "Don't forget your homework"
+]
+labels = [
+    "spam",
+    "spam",
+    "spam",
+    "spam",
+    "ham",
+    "ham",
+    "ham",
+    "ham",
+    "ham",
+    "ham"
+]
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(messages)
+model = MultinomialNB()
+model.fit(X, labels)
+print("Spam Message Classifier")
+while True:
+    text = input("\nEnter a message (or 'exit'): ").strip()
+    if text.lower() == "exit":
+        print("Goodbye!")
+        break
+    if not text:
+        print("Message cannot be empty.")
+        continue
+    text_vector = vectorizer.transform([text])
+    prediction = model.predict(text_vector)
+    print("Prediction:", prediction[0])

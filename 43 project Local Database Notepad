@@ -1,0 +1,63 @@
+import sqlite3
+print("=== Local Database Notepad ===")
+connection = sqlite3.connect("notes.db")
+cursor = connection.cursor()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    note TEXT
+)
+""")
+connection.commit()
+def add_note():
+    note = input("Enter your note: ")
+    cursor.execute(
+        "INSERT INTO notes (note) VALUES (?)",
+        (note,)
+    )
+    connection.commit()
+    print("Note saved successfully!")
+def view_notes():
+    cursor.execute(
+        "SELECT * FROM notes"
+    )
+    notes = cursor.fetchall()
+    if not notes:
+        print("No notes found.")
+        return
+    print("\n=== Your Notes ===")
+    for note in notes:
+        print(
+            f"{note[0]}. {note[1]}"
+        )
+def delete_note():
+    note_id = input(
+        "Enter note ID to delete: "
+    )
+    cursor.execute(
+        "DELETE FROM notes WHERE id = ?",
+        (note_id,)
+    )
+    connection.commit()
+    print("Note deleted successfully!")
+while True:
+    print("\n=== Database Notepad ===")
+    print("1. Add Note")
+    print("2. View Notes")
+    print("3. Delete Note")
+    print("4. Exit")
+    choice = input(
+        "Choose option: "
+    )
+    if choice == "1":
+        add_note()
+    elif choice == "2":
+        view_notes()
+    elif choice == "3":
+        delete_note()
+    elif choice == "4":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")
+connection.close()

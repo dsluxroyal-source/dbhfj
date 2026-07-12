@@ -1,0 +1,38 @@
+import os
+import shutil
+def backup_to_usb():
+    source = input("Enter source folder path: ")
+    destination = input("Enter USB folder path: ")
+    if not os.path.exists(source):
+        print("Source folder not found.")
+        return
+    if not os.path.exists(destination):
+        print("USB folder not found.")
+        return
+    try:
+        files = os.listdir(source)
+        if not files:
+            print("No files found to back up.")
+            return
+        copied = 0
+        for file in files:
+            source_file = os.path.join(source, file)
+            destination_file = os.path.join(destination, file)
+            if os.path.isfile(source_file):
+                shutil.copy2(source_file, destination_file)
+                copied += 1
+        print(f"Backup completed. {copied} file(s) copied successfully.")
+    except Exception as e:
+        print("Error:", e)
+while True:
+    print("\n===== AUTO BACKUP TO USB =====")
+    print("1. Backup Files")
+    print("2. Exit")
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        backup_to_usb()
+    elif choice == "2":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice. Try again.")

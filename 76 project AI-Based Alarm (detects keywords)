@@ -1,0 +1,36 @@
+import time
+alarm_keywords = {
+    "fire": " Fire detected!",
+    "help": " Emergency help requested!",
+    "danger": " Danger detected!",
+    "intruder": " Intruder detected!",
+    "emergency": " Emergency detected!"
+}
+def check_keywords():
+    text = input("Enter text: ").lower().strip()
+    if not text:
+        print("Please enter some text.")
+        return
+    detected = False
+    for keyword in alarm_keywords:
+        if keyword in text:
+            print("\nALARM ACTIVATED!")
+            print(alarm_keywords[keyword])
+            for i in range(3):
+                print("BEEP! BEEP! BEEP!")
+                time.sleep(1)
+            detected = True
+    if not detected:
+        print("No alarm keywords found.")
+while True:
+    print("\n=== AI-Based Alarm ===")
+    print("1. Check Text")
+    print("2. Exit")
+    choice = input("Enter choice: ")
+    if choice == "1":
+        check_keywords()
+    elif choice == "2":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice. Try again.")

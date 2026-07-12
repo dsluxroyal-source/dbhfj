@@ -1,0 +1,28 @@
+import pywhatkit
+import time
+print("=== Auto WhatsApp Message Sender ===")
+while True:
+    phone = input("Enter phone number with country code: ")
+    if phone.lower() == "exit":
+        print("Goodbye!")
+        break
+    message = input("Enter message: ")
+    if message.lower() == "exit":
+        print("Goodbye!")
+        break
+    try:
+        hour = int(input("Enter hour (24-hour format): "))
+        minute = int(input("Enter minute: "))
+
+        print("Scheduling message...")
+
+        pywhatkit.sendwhatmsg(
+            phone,
+            message,
+            hour,
+            minute
+        )
+        print("Message scheduled successfully!")
+    except Exception as e:
+        print("Error:", e)
+    print()

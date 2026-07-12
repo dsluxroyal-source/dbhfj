@@ -1,0 +1,151 @@
+import os
+import json
+import webbrowser
+import datetime
+import pyautogui
+MEMORY_FILE = "memory.json"
+def load_memory():
+    if os.path.exists(MEMORY_FILE):
+        with open(MEMORY_FILE, "r") as file:
+            return json.load(file)
+    return {}
+def save_memory(memory):
+    with open(MEMORY_FILE, "w") as file:
+        json.dump(memory, file, indent=4)
+memory = load_memory()
+def open_google():
+    webbrowser.open("https://www.google.com")
+    print("Opening Google...")
+def open_youtube():
+    webbrowser.open("https://www.youtube.com")
+    print("Opening YouTube...")
+def open_website(site):
+    if not site.startswith("http"):
+        site = "https://" + site
+    webbrowser.open(site)
+    print("Opening", site)
+def google_search(query):
+    url = "https://www.google.com/search?q=" + query.replace(" ", "+")
+    webbrowser.open(url)
+    print("Searching:", query)
+def show_time():
+    print(datetime.datetime.now().strftime("%I:%M:%S %p"))
+def show_date():
+    print(datetime.datetime.now().strftime("%d %B %Y"))
+def calculate(exp):
+    try:
+        result = eval(exp)
+        print("Answer:", result)
+    except:
+        print("Invalid expression.")
+def create_folder(name):
+    try:
+        os.makedirs(name, exist_ok=True)
+        print("Folder created.")
+    except Exception as e:
+        print(e)
+def list_files(path):
+    if path == "":
+        path = os.getcwd()
+    if not os.path.exists(path):
+        print("Path not found.")
+        return
+    for item in os.listdir(path):
+        if os.path.isdir(os.path.join(path, item)):
+            print("[Folder]", item)
+        else:
+            print("[File] ", item)
+def screenshot():
+    try:
+        image = pyautogui.screenshot()
+        image.save("screenshot.png")
+        print("Screenshot saved.")
+    except Exception as e:
+        print(e)
+def remember(text):
+    if " is " not in text:
+        print("Example: remember age is 16")
+        return
+    key, value = text.split(" is ", 1)
+    memory[key.strip().lower()] = value.strip()
+    save_memory(memory)
+    print("Remembered.")
+def recall(key):
+    key = key.lower().strip()
+    if key in memory:
+        print(memory[key])
+    else:
+        print("I don't know.")
+def show_memory():
+    if not memory:
+        print("Memory empty.")
+        return
+    for k, v in memory.items():
+        print(k, ":", v)
+def help_menu():
+    print("""
+Commands
+open google
+open youtube
+open website github.com
+search python programming
+time
+date
+calculate 5*7+2
+create folder Test
+list files
+remember age is 16
+recall age
+show memory
+screenshot
+help
+exit
+""")
+print("=" * 50)
+print("Natural Language Command Engine")
+print("=" * 50)
+help_menu()
+while True:
+    command = input("\nYou : ").strip().lower()
+    if command == "":
+        continue
+    if command == "exit":
+        print("Goodbye!")
+        break
+    elif command == "help":
+        help_menu()
+    elif command == "open google":
+        open_google()
+    elif command == "open youtube":
+        open_youtube()
+    elif command.startswith("open website"):
+        site = command.replace("open website", "").strip()
+        open_website(site)
+    elif command.startswith("search"):
+        query = command.replace("search", "").strip()
+        google_search(query)
+    elif command == "time":
+        show_time()
+    elif command == "date":
+        show_date()
+    elif command.startswith("calculate"):
+        exp = command.replace("calculate", "").strip()
+        calculate(exp)
+    elif command.startswith("create folder"):
+        folder = command.replace("create folder", "").strip()
+        create_folder(folder)
+    elif command.startswith("list files"):
+        path = command.replace("list files", "").strip()
+        list_files(path)
+    elif command.startswith("remember"):
+        text = command.replace("remember", "").strip()
+        remember(text)
+    elif command.startswith("recall"):
+        key = command.replace("recall", "").strip()
+        recall(key)
+    elif command == "show memory":
+        show_memory()
+    elif command == "screenshot":
+        screenshot()
+    else:
+        print("Unknown command.")

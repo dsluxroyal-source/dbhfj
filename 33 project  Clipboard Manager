@@ -1,0 +1,27 @@
+import pyperclip
+import time
+clipboard_history = []
+def save_clipboard():
+    current_text = pyperclip.paste()
+    if current_text and current_text not in clipboard_history:
+        clipboard_history.append(current_text)
+        print("New clipboard item saved!")
+print("=== Clipboard Manager ===")
+print("Type 'history' to view saved items.")
+print("Type 'exit' to quit.")
+while True:
+    save_clipboard()
+    command = input("\nCommand: ").lower()
+    if command == "history":
+        if not clipboard_history:
+            print("No clipboard items saved.")
+        else:
+            print("\nClipboard History:")
+            for index, item in enumerate(clipboard_history, start=1):
+                print(f"{index}. {item}")
+    elif command == "exit":
+        print("Goodbye!")
+        break
+    else:
+        print("Clipboard checked.")
+    time.sleep(1)

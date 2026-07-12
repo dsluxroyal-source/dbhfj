@@ -1,0 +1,15 @@
+print("Jarvis Online")
+print("Type a command (open youtube, time, date, exit)")
+while True:
+    command = input("You: ").lower()
+    if command == "open youtube":
+        print("Jarvis: Opening YouTube...")
+    elif command == "time":
+        from time import strftime
+        current_time = strftime("%H:%M:%S")
+        print("Jarvis: Today's date is", current_date)
+    elif command == "exit":
+        print("Jarvis: Goodbye. Stay sharp.")
+        break
+    else:
+        print("Jarvis: Command not recognized.")

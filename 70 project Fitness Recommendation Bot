@@ -1,0 +1,50 @@
+def fitness_bot():
+    print("\n===== Fitness Recommendation Bot =====")
+    goal = input("Enter your goal (weight loss / muscle gain / fitness): ").strip().lower()
+    if not goal:
+        print("Goal cannot be empty.")
+        return
+    if goal == "weight loss":
+        print("\nWorkout Plan:")
+        print("- 30 minutes running")
+        print("- 20 squats")
+        print("- 20 push-ups")
+        print("- Plank for 1 minute")
+        print("\nDiet Tips:")
+        print("- Eat vegetables")
+        print("- Drink plenty of water")
+        print("- Reduce sugar")
+    elif goal == "muscle gain":
+        print("\nWorkout Plan:")
+        print("- Push-ups")
+        print("- Pull-ups")
+        print("- Squats")
+        print("- Progressive strength training")
+        print("\nDiet Tips:")
+        print("- Eat protein-rich foods")
+        print("- Eggs, chicken, milk")
+        print("- Healthy carbohydrates")
+    elif goal == "fitness":
+        print("\nWorkout Plan:")
+        print("- Walking")
+        print("- Stretching")
+        print("- Light cardio")
+        print("- Bodyweight exercises")
+        print("\nDiet Tips:")
+        print("- Balanced diet")
+        print("- Fruits and vegetables")
+        print("- Stay hydrated")
+    else:
+        print("Goal not recognized.")
+while True:
+    print("\n===== Main Menu =====")
+    print("1. Get Fitness Recommendation")
+    print("2. Exit")
+    choice = input("Choose an option: ")
+    if choice == "1":
+        fitness_bot()
+    elif choice == "2":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")

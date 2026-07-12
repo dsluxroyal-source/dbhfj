@@ -1,0 +1,59 @@
+import os
+import speech_recognition as sr
+recognizer = sr.Recognizer()
+def listen():
+    with sr.Microphone() as source:
+        print("Listening...")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+    try:
+        command = recognizer.recognize_google(audio)
+        print("You:", command)
+        return command.lower()
+    except:
+        return ""
+while True:
+    print("\n===== VOICE FILE SYSTEM =====")
+    print("Say: list files")
+    print("Say: search file")
+    print("Say: create folder")
+    print("Say: delete folder")
+    print("Say: exit")
+    command = listen()
+    if command == "list files":
+        folder = input("Folder Path: ")
+        if os.path.exists(folder):
+            for file in os.listdir(folder):
+                print(file)
+        else:
+            print("Folder not found.")
+    elif command == "search file":
+        folder = input("Folder Path: ")
+        keyword = input("File Name: ").lower()
+        found = False
+        if os.path.exists(folder):
+            for root, dirs, files in os.walk(folder):
+                for file in files:
+                    if keyword in file.lower():
+                        print(os.path.join(root, file))
+                        found = True
+            if not found:
+                print("File not found.")
+        else:
+            print("Folder not found.")
+    elif command == "create folder":
+        name = input("Folder Name: ")
+        os.mkdir(name)
+        print("Folder created.")
+    elif command == "delete folder":
+        name = input("Folder Name: ")
+        if os.path.exists(name):
+            os.rmdir(name)
+            print("Folder deleted.")
+        else:
+            print("Folder not found.")
+    elif command == "exit":
+        print("Goodbye!")
+        break
+    else:
+        print("Unknown command.")

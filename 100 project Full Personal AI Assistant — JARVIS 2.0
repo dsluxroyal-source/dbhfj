@@ -1,0 +1,101 @@
+import os
+import json
+import webbrowser
+import datetime
+MEMORY = "memory.json"
+def load_memory():
+    if os.path.exists(MEMORY):
+        with open(MEMORY, "r") as f:
+            return json.load(f)
+    return {}
+def save_memory(data):
+    with open(MEMORY, "w") as f:
+        json.dump(data, f, indent=4)
+memory = load_memory()
+def help_menu():
+    print("""
+Commands:
+help
+time
+date
+google
+youtube
+search <text>
+calc <expression>
+remember <key> <value>
+recall <key>
+memory
+mkdir <folder>
+files
+exit
+""")
+def calculate(exp):
+    try:
+        print("Answer:", eval(exp))
+    except:
+        print("Invalid expression.")
+print("=" * 40)
+print("        JARVIS LITE")
+print("=" * 40)
+help_menu()
+while True:
+    cmd = input("\nYou: ").strip()
+    if not cmd:
+        continue
+    low = cmd.lower()
+    if low == "exit":
+        print("Goodbye!")
+        break
+    elif low == "help":
+        help_menu()
+    elif low == "time":
+        print(datetime.datetime.now().strftime("%I:%M:%S %p"))
+    elif low == "date":
+        print(datetime.datetime.now().strftime("%d %B %Y"))
+    elif low == "google":
+        webbrowser.open("https://google.com")
+    elif low == "youtube":
+        webbrowser.open("https://youtube.com")
+    elif low.startswith("search "):
+        q = cmd[7:]
+        webbrowser.open(
+            "https://www.google.com/search?q=" +
+            q.replace(" ", "+")
+        )
+    elif low.startswith("calc "):
+        calculate(cmd[5:])
+    elif low.startswith("remember "):
+        parts = cmd.split(maxsplit=2)
+        if len(parts) == 3:
+            memory[parts[1].lower()] = parts[2]
+            save_memory(memory)
+            print("Saved.")
+        else:
+            print("Usage: remember name Ali")
+    elif low.startswith("recall "):
+        key = cmd.split(maxsplit=1)[1].lower()
+        if key in memory:
+            print(memory[key])
+        else:
+            print("Not found.")
+    elif low == "memory":
+        if not memory:
+            print("Memory Empty")
+        else:
+            for k, v in memory.items():
+                print(f"{k} : {v}")
+    elif low.startswith("mkdir "):
+        folder = cmd[6:]
+        try:
+            os.makedirs(folder, exist_ok=True)
+            print("Folder created.")
+        except Exception as e:
+            print(e)
+    elif low == "files":
+        for item in os.listdir():
+            if os.path.isdir(item):
+                print("[Folder]", item)
+            else:
+                print("[File] ", item)
+    else:
+        print("Unknown command. Type 'help'.")

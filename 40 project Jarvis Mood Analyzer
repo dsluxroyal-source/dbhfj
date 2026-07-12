@@ -1,0 +1,52 @@
+print("=== Jarvis Mood Analyzer ===")
+print("Tell Jarvis how you feel.")
+print("Type 'exit' to quit.")
+def analyze_mood(text):
+    text = text.lower()
+    happy_words = [
+        "happy",
+        "great",
+        "good",
+        "awesome",
+        "excited",
+        "amazing"
+    ]
+    sad_words = [
+        "sad",
+        "upset",
+        "depressed",
+        "bad",
+        "unhappy",
+        "cry"
+    ]
+    angry_words = [
+        "angry",
+        "mad",
+        "furious",
+        "annoyed",
+        "hate"
+    ]
+    for word in happy_words:
+        if word in text:
+            return "happy"
+    for word in sad_words:
+        if word in text:
+            return "sad"
+    for word in angry_words:
+        if word in text:
+            return "angry"
+    return "neutral"
+while True:
+    user_text = input("\nHow are you feeling? ")
+    if user_text.lower() == "exit":
+        print("Jarvis: Goodbye!")
+        break
+    mood = analyze_mood(user_text)
+    if mood == "happy":
+        print("Jarvis: Nice! Keep that positive energy going.")
+    elif mood == "sad":
+        print("Jarvis: Tough days happen. Take care of yourself.")
+    elif mood == "angry":
+        print("Jarvis: Try to stay calm and think clearly.")
+    else:
+        print("Jarvis: I can't clearly detect your mood.")

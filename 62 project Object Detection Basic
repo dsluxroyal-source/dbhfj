@@ -1,0 +1,54 @@
+import cv2
+classes = [
+    "background", "aeroplane", "bicycle", "bird", "boat",
+    "bottle", "bus", "car", "cat", "chair",
+    "cow", "diningtable", "dog", "horse", "motorbike",
+    "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"
+]
+net = cv2.dnn.readNetFromCaffe(
+    "MobileNetSSD_deploy.prototxt",
+    "MobileNetSSD_deploy.caffemodel"
+)
+camera = cv2.VideoCapture(0)
+if not camera.isOpened():
+    print("Unable to access camera.")
+    exit()
+print("Press Q to quit.")
+while True:
+    success, frame = camera.read()
+    if not success:
+        print("Failed to capture frame.")
+        break
+    height, width = frame.shape[:2]
+    blob = cv2.dnn.blobFromImage(
+        frame,
+        0.007843,
+        (300, 300),
+        127.5
+    )
+    net.setInput(blob)
+    detections = net.forward()
+    for i in range(detections.shape[2]):
+        confidence = detections[0, 0, i, 2]
+        if confidence > 0.5:
+            class_id = int(detections[0, 0, i, 1])
+            x1 = int(detections[0, 0, i, 3] * width)
+            y1 = int(detections[0, 0, i, 4] * height)
+            x2 = int(detections[0, 0, i, 5] * width)
+            y2 = int(detections[0, 0, i, 6] * height)
+            label = classes[class_id]
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.putText(
+                frame,
+                label,
+                (x1, y1 - 10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.6,
+                (0, 255, 0),
+                2
+            )
+    cv2.imshow("Basic Object Detection", frame)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+camera.release()
+cv2.destroyAllWindows()

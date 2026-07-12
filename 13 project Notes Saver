@@ -1,0 +1,28 @@
+FILENAME = "notes.txt"
+print("Welcome to Jarvis Notes Saver")
+print("Type 'add' to write a note")
+print("Type 'view' to read notes")
+print("Type 'exit' to quit\n")
+while True:
+    choice = input("Your choice (add/view/exit): ").lower()
+    if choice == "add":
+        note = input("Write your note: ")
+        with open(FILENAME, "a") as file:
+            file.write(note + "\n")
+        print("Note saved successfully!\n")
+    elif choice == "view":
+        try:
+            with open(FILENAME, "r") as file:
+                notes = file.read()
+                if notes.strip() == "":
+                    print("No notes found.\n")
+                else:
+                    print("\n Your Notes:")
+                    print(notes)
+        except FileNotFoundError:
+            print("No notes file found yet.\n")
+    elif choice == "exit":
+        print("Goodbye! Stay organized.")
+        break
+    else:
+        print("Invalid choice. Please type add, view, or exit.\n")

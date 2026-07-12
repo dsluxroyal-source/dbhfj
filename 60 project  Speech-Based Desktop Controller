@@ -1,0 +1,60 @@
+import speech_recognition as sr
+import pyautogui
+import webbrowser
+import os
+import time
+recognizer = sr.Recognizer()
+print("=== Speech-Based Desktop Controller ===")
+print("Say commands like:")
+print("- open google")
+print("- open youtube")
+print("- screenshot")
+print("- type hello")
+print("- press enter")
+print("- exit")
+while True:
+    try:
+        with sr.Microphone() as source:
+            print("\nListening...")
+            recognizer.adjust_for_ambient_noise(source, duration=1)
+            audio = recognizer.listen(source)
+        command = recognizer.recognize_google(audio).lower()
+        print("You said:", command)
+        if command == "exit":
+            print("Goodbye!")
+            break
+        elif command == "open google":
+            webbrowser.open("https://www.google.com")
+            print("Google opened.")
+        elif command == "open youtube":
+            webbrowser.open("https://www.youtube.com")
+            print("YouTube opened.")
+        elif command == "screenshot":
+            filename = f"screenshot_{int(time.time())}.png"
+            image = pyautogui.screenshot()
+            image.save(filename)
+            print("Screenshot saved as", filename)
+        elif command.startswith("type "):
+            text = command.replace("type ", "", 1)
+            pyautogui.write(text)
+            print("Text typed.")
+        elif command == "press enter":
+            pyautogui.press("enter")
+            print("Enter key pressed.")
+        elif command == "press space":
+            pyautogui.press("space")
+            print("Space key pressed.")
+        elif command == "minimize window":
+            pyautogui.hotkey("win", "down")
+            print("Window minimized.")
+        elif command == "lock computer":
+            os.system("rundll32.exe user32.dll,LockWorkStation")
+            print("Computer locked.")
+        else:
+            print("Unknown command.")
+    except sr.UnknownValueError:
+        print("Could not understand your voice.")
+    except sr.RequestError:
+        print("Speech recognition service is unavailable.")
+    except Exception as e:
+        print("Error:", e)

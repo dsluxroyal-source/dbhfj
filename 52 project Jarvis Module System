@@ -1,0 +1,53 @@
+modules = {
+    "hello": "Hello, I am Jarvis!",
+    "bye": "Goodbye, have a nice day!"
+}
+def add_module():
+    command = input("Enter command name: ").lower()
+    response = input("Enter command response: ")
+    if command in modules:
+        print("Command already exists.")
+    else:
+        modules[command] = response
+        print("Command added successfully.")
+def remove_module():
+    command = input("Enter command to remove: ").lower()
+    if command in modules:
+        del modules[command]
+        print("Command removed successfully.")
+    else:
+        print("Command not found.")
+def view_modules():
+    if not modules:
+        print("No commands available.")
+        return
+    print("\nAvailable Commands:")
+    for command in modules:
+        print("-", command)
+def run_command():
+    command = input("Enter command: ").lower()
+    if command in modules:
+        print("Jarvis:", modules[command])
+    else:
+        print("Unknown command.")
+while True:
+    print("\n=== JARVIS MODULE SYSTEM ===")
+    print("1. Add Module")
+    print("2. Remove Module")
+    print("3. View Modules")
+    print("4. Run Command")
+    print("5. Exit")
+    choice = input("Choose option: ")
+    if choice == "1":
+        add_module()
+    elif choice == "2":
+        remove_module()
+    elif choice == "3":
+        view_modules()
+    elif choice == "4":
+        run_command()
+    elif choice == "5":
+        print("Jarvis shutting down...")
+        break
+    else:
+        print("Invalid option.")

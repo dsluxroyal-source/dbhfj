@@ -1,0 +1,76 @@
+intents = {
+    "Greeting": [
+        "hello",
+        "hi",
+        "hey",
+        "good morning",
+        "good evening"
+    ],
+    "Open Website": [
+        "open google",
+        "open youtube",
+        "open facebook",
+        "open instagram"
+    ],
+    "Time": [
+        "time",
+        "current time",
+        "what time is it"
+    ],
+    "Date": [
+        "date",
+        "today",
+        "today date"
+    ],
+    "Weather": [
+        "weather",
+        "temperature",
+        "forecast"
+    ],
+    "Calculator": [
+        "calculate",
+        "add",
+        "subtract",
+        "multiply",
+        "divide"
+    ],
+    "Exit": [
+        "exit",
+        "quit",
+        "goodbye",
+        "bye"
+    ]
+}
+def detect_intent():
+    command = input("\nEnter your command: ").strip().lower()
+    if not command:
+        print("Please enter a command.")
+        return
+    found = False
+    for intent, keywords in intents.items():
+        for keyword in keywords:
+            if keyword in command:
+                print("\nIntent Detected:", intent)
+                found = True
+                break
+        if found:
+            break
+    if not found:
+        print("\nUnknown Intent")
+while True:
+    print("\n====== AI Jarvis Intent Detection ======")
+    print("1. Detect Intent")
+    print("2. View All Intents")
+    print("3. Exit")
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        detect_intent()
+    elif choice == "2":
+        print("\nAvailable Intents:\n")
+        for intent in intents:
+            print("-", intent)
+    elif choice == "3":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")

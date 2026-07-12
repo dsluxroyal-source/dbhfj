@@ -1,0 +1,65 @@
+import os
+FILE_NAME = "plugins.txt"
+plugins = {}
+def load_plugins():
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            for line in file:
+                command, response = line.strip().split("|")
+                plugins[command] = response
+def save_plugins():
+    with open(FILE_NAME, "w", encoding="utf-8") as file:
+        for command, response in plugins.items():
+            file.write(f"{command}|{response}\n")
+def add_plugin():
+    command = input("Plugin Command: ").strip().lower()
+    response = input("Plugin Response: ").strip()
+    if command in plugins:
+        print("Plugin already exists.")
+    else:
+        plugins[command] = response
+        save_plugins()
+        print("Plugin added successfully.")
+def remove_plugin():
+    command = input("Plugin Command to Remove: ").strip().lower()
+    if command in plugins:
+        del plugins[command]
+        save_plugins()
+        print("Plugin removed.")
+    else:
+        print("Plugin not found.")
+def view_plugins():
+    if not plugins:
+        print("No plugins installed.")
+        return
+    print("\n===== INSTALLED PLUGINS =====")
+    for command in plugins:
+        print("-", command)
+def run_plugin():
+    command = input("Enter Command: ").strip().lower()
+    if command in plugins:
+        print("\nJarvis:", plugins[command])
+    else:
+        print("Unknown plugin.")
+load_plugins()
+while True:
+    print("\n===== JARVIS PLUGIN STORE =====")
+    print("1. Add Plugin")
+    print("2. Remove Plugin")
+    print("3. View Plugins")
+    print("4. Run Plugin")
+    print("5. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        add_plugin()
+    elif choice == "2":
+        remove_plugin()
+    elif choice == "3":
+        view_plugins()
+    elif choice == "4":
+        run_plugin()
+    elif choice == "5":
+        print("Jarvis shutting down...")
+        break
+    else:
+        print("Invalid option.")

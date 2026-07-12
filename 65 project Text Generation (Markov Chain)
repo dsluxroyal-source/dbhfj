@@ -1,0 +1,54 @@
+import random
+markov_chain = {}
+def train_model():
+    text = input("Enter training text:\n").strip()
+    if not text:
+        print("Text cannot be empty.")
+        return
+    words = text.split()
+    if len(words) < 2:
+        print("Please enter at least two words.")
+        return
+    markov_chain.clear()
+    for i in range(len(words) - 1):
+        word = words[i]
+        next_word = words[i + 1]
+        if word not in markov_chain:
+            markov_chain[word] = []
+        markov_chain[word].append(next_word)
+    print("Model trained successfully.")
+def generate_text():
+    if not markov_chain:
+        print("Train the model first.")
+        return
+    try:
+        length = int(input("How many words to generate? "))
+        if length <= 0:
+            print("Enter a positive number.")
+            return
+        current_word = random.choice(list(markov_chain.keys()))
+        output = [current_word]
+        for _ in range(length - 1):
+            if current_word not in markov_chain:
+                break
+            current_word = random.choice(markov_chain[current_word])
+            output.append(current_word)
+        print("\nGenerated Text:")
+        print(" ".join(output))
+    except ValueError:
+        print("Please enter a valid number.")
+while True:
+    print("\n===== Markov Chain Text Generator =====")
+    print("1. Train Model")
+    print("2. Generate Text")
+    print("3. Exit")
+    choice = input("Choose an option: ")
+    if choice == "1":
+        train_model()
+    elif choice == "2":
+        generate_text()
+    elif choice == "3":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")

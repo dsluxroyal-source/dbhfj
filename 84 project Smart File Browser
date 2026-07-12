@@ -1,0 +1,53 @@
+import os
+def list_files():
+    folder = input("Enter folder path: ").strip()
+    if not os.path.exists(folder):
+        print("Folder not found.")
+        return
+    print("\n===== FILES =====")
+    try:
+        items = os.listdir(folder)
+        if not items:
+            print("Folder is empty.")
+            return
+        for item in items:
+            path = os.path.join(folder, item)
+            if os.path.isfile(path):
+                size = os.path.getsize(path)
+                print(f"[FILE] {item} ({size} bytes)")
+            else:
+                print(f"[DIR ] {item}")
+    except Exception as e:
+        print("Error:", e)
+def search_files():
+    folder = input("Enter folder path: ").strip()
+    keyword = input("Enter keyword: ").lower().strip()
+    if not os.path.exists(folder):
+        print("Folder not found.")
+        return
+    found = False
+    try:
+        for root, dirs, files in os.walk(folder):
+            for file in files:
+                if keyword in file.lower():
+                    print(os.path.join(root, file))
+                    found = True
+        if not found:
+            print("No matching files found.")
+    except Exception as e:
+        print("Error:", e)
+while True:
+    print("\n===== SMART FILE BROWSER =====")
+    print("1. Browse Folder")
+    print("2. Search File")
+    print("3. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        list_files()
+    elif choice == "2":
+        search_files()
+    elif choice == "3":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

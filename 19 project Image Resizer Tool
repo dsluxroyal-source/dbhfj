@@ -1,0 +1,30 @@
+from PIL import Image
+print("🖼️ Jarvis Image Resizer Tool")
+print("Type 'exit' anytime to quit")
+while True:
+    image_path = input("\nEnter image file path: ")
+    if image_path.lower() == "exit":
+        print("Goodbye! Stay creative.")
+        break
+    try:
+        img = Image.open(image_path)
+        print("Image loaded successfully!")
+        print("Current size:", img.size)
+        width_input = input("Enter new width: ")
+        if width_input.lower() == "exit":
+            break
+        height_input = input("Enter new height: ")
+        if height_input.lower() == "exit":
+            break
+        width = int(width_input)
+        height = int(height_input)
+        resized_img = img.resize((width, height))
+        new_name = "resized_" + image_path
+        resized_img.save(new_name)
+        print("Image resized and saved as:", new_name)
+    except FileNotFoundError:
+        print("Error: Image file not found.")
+    except ValueError:
+        print("Error: Width and height must be numbers.")
+    except Exception as e:
+        print("Unexpected error:", e)

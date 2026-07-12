@@ -1,0 +1,67 @@
+import os
+FILE_NAME = "knowledge.txt"
+knowledge = {}
+def load_data():
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            for line in file:
+                topic, note = line.strip().split("|", 1)
+                knowledge[topic] = note
+def save_data():
+    with open(FILE_NAME, "w", encoding="utf-8") as file:
+        for topic, note in knowledge.items():
+            file.write(f"{topic}|{note}\n")
+def add_knowledge():
+    topic = input("Topic: ").strip().lower()
+    note = input("Knowledge: ").strip()
+    if topic and note:
+        knowledge[topic] = note
+        save_data()
+        print("Knowledge saved.")
+    else:
+        print("Invalid input.")
+def view_knowledge():
+    if not knowledge:
+        print("Knowledge base is empty.")
+        return
+    print("\n===== KNOWLEDGE BASE =====")
+    for topic, note in knowledge.items():
+        print(f"\nTopic: {topic}")
+        print(f"Note : {note}")
+def search_knowledge():
+    topic = input("Search Topic: ").strip().lower()
+    if topic in knowledge:
+        print("\nResult:")
+        print(knowledge[topic])
+    else:
+        print("Topic not found.")
+def delete_knowledge():
+    topic = input("Topic to Delete: ").strip().lower()
+    if topic in knowledge:
+        del knowledge[topic]
+        save_data()
+        print("Knowledge deleted.")
+    else:
+        print("Topic not found.")
+load_data()
+while True:
+    print("\n===== PERSONAL KNOWLEDGE BASE AI =====")
+    print("1. Add Knowledge")
+    print("2. View Knowledge")
+    print("3. Search Knowledge")
+    print("4. Delete Knowledge")
+    print("5. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        add_knowledge()
+    elif choice == "2":
+        view_knowledge()
+    elif choice == "3":
+        search_knowledge()
+    elif choice == "4":
+        delete_knowledge()
+    elif choice == "5":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

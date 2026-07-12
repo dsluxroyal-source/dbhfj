@@ -1,0 +1,48 @@
+import os
+import datetime
+MEMORY_FILE = "chat_memory.txt"
+def load_memory():
+    if not os.path.exists(MEMORY_FILE):
+        return []
+    with open(MEMORY_FILE, "r", encoding="utf-8") as file:
+        return file.readlines()
+def save_memory(user, bot):
+    with open(MEMORY_FILE, "a", encoding="utf-8") as file:
+        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        file.write(f"\n[{time}]\n")
+        file.write(f"You : {user}\n")
+        file.write(f"Jarvis : {bot}\n")
+def chatbot(user):
+    text = user.lower()
+    if "hello" in text:
+        return "Hello! Nice to meet you."
+    elif "how are you" in text:
+        return "I am doing great."
+    elif "your name" in text:
+        return "My name is Jarvis."
+    elif "time" in text:
+        return datetime.datetime.now().strftime("%H:%M:%S")
+    elif "date" in text:
+        return datetime.datetime.now().strftime("%d-%m-%Y")
+    elif "bye" in text:
+        return "Goodbye!"
+    else:
+        return "Sorry, I don't understand."
+print("=" * 40)
+print("      JARVIS CHATBOT")
+print("=" * 40)
+history = load_memory()
+if history:
+    print("\nPrevious Memory Found")
+    print("-" * 40)
+    for line in history[-10:]:
+        print(line.strip())
+    print("-" * 40)
+while True:
+    user = input("\nYou : ")
+    if user.lower() == "exit":
+        print("Jarvis : Goodbye!")
+        break
+    reply = chatbot(user)
+    print("Jarvis :", reply)
+    save_memory(user, reply)

@@ -1,0 +1,23 @@
+print("=== Mini Jarvis Chatbot ===")
+print("Type 'exit' to quit.")
+while True:
+    user_input = input("\nYou: ").lower()
+    if user_input == "hello":
+        print("Jarvis: Hello! How are you?")
+    elif user_input == "how are you":
+        print("Jarvis: I am doing great. Ready to help!")
+    elif user_input == "time":
+        from datetime import datetime
+        current_time = datetime.now().strftime("%I:%M:%S %p")
+        print("Jarvis:", current_time)
+    elif user_input == "date":
+        from datetime import datetime
+        current_date = datetime.now().strftime("%d-%m-%Y")
+        print("Jarvis:", current_date)
+    elif user_input == "your name":
+        print("Jarvis: My name is Jarvis.")
+    elif user_input == "exit":
+        print("Jarvis: Goodbye!")
+        break
+    else:
+        print("Jarvis: Sorry, I don't understand that command.")

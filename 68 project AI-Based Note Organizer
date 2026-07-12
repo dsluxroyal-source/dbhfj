@@ -1,0 +1,56 @@
+notes = []
+categories = {
+    "Study": ["study", "exam", "python", "school", "college", "math"],
+    "Work": ["meeting", "office", "project", "client", "report"],
+    "Personal": ["family", "friend", "home", "birthday", "travel"],
+    "Shopping": ["buy", "shop", "market", "price", "order"],
+    "Health": ["doctor", "medicine", "exercise", "gym", "diet"]
+}
+def add_note():
+    note = input("Enter your note: ").strip()
+    if not note:
+        print("Note cannot be empty.")
+        return
+    notes.append(note)
+    print("Note added successfully.")
+def organize_notes():
+    if not notes:
+        print("No notes available.")
+        return
+    organized = {}
+    for note in notes:
+        found = False
+        for category, keywords in categories.items():
+            for keyword in keywords:
+                if keyword in note.lower():
+                    if category not in organized:
+                        organized[category] = []
+                    organized[category].append(note)
+                    found = True
+                    break
+            if found:
+                break
+        if not found:
+            if "Other" not in organized:
+                organized["Other"] = []
+            organized["Other"].append(note)
+    print("\n===== Organized Notes =====")
+    for category, note_list in organized.items():
+        print(f"\n{category}")
+        for note in note_list:
+            print("-", note)
+while True:
+    print("\n===== AI Note Organizer =====")
+    print("1. Add Note")
+    print("2. Organize Notes")
+    print("3. Exit")
+    choice = input("Choose an option: ")
+    if choice == "1":
+        add_note()
+    elif choice == "2":
+        organize_notes()
+    elif choice == "3":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")

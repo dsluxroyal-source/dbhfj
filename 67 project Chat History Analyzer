@@ -1,0 +1,49 @@
+from collections import Counter
+import re
+def analyze_chat():
+    filename = input("Enter chat file name: ").strip()
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+        if not lines:
+            print("Chat file is empty.")
+            return
+        total_messages = 0
+        users = Counter()
+        words = Counter()
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            match = re.match(r"(.+?):\s(.+)", line)
+            if match:
+                user = match.group(1)
+                message = match.group(2)
+                total_messages += 1
+                users[user] += 1
+                word_list = re.findall(r"\b\w+\b", message.lower())
+                words.update(word_list)
+        print("\n===== Chat Analysis =====")
+        print("Total Messages:", total_messages)
+        print("\nMost Active Users:")
+        for user, count in users.most_common():
+            print(f"{user}: {count}")
+        print("\nTop 10 Words:")
+        for word, count in words.most_common(10):
+            print(f"{word}: {count}")
+    except FileNotFoundError:
+        print("File not found.")
+    except Exception as e:
+        print("Error:", e)
+while True:
+    print("\n===== Chat History Analyzer =====")
+    print("1. Analyze Chat")
+    print("2. Exit")
+    choice = input("Choose an option: ")
+    if choice == "1":
+        analyze_chat()
+    elif choice == "2":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")

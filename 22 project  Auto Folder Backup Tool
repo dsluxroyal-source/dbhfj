@@ -1,0 +1,28 @@
+import os
+import shutil
+print("=== Auto Folder Backup Tool ===")
+print("Type 'exit' anytime to quit.\n")
+while True:
+    source_folder = input("Enter source folder path: ")
+    if source_folder.lower() == "exit":
+        print("Goodbye, backup stopped.")
+        break
+    backup_folder = input("Enter backup folder path: ")
+    if backup_folder.lower() == "exit":
+        print("Goodbye, backup stopped.")
+        break
+    if not os.path.exists(source_folder):
+        print("Source folder not found.\n")
+        continue
+    try:
+        # Copy the whole folder
+        shutil.copytree(source_folder, backup_folder)
+        print("\nBackup completed successfully!")
+        print("Files copied to:", backup_folder)
+        print()
+    except FileExistsError:
+        print("\nBackup folder already exists.")
+        print("Choose another folder name.\n")
+    except Exception as e:
+        print("\nUnexpected error:", e)
+        print()

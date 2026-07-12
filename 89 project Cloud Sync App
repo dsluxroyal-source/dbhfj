@@ -1,0 +1,66 @@
+import os
+import shutil
+LOCAL_FOLDER = ""
+CLOUD_FOLDER = "CloudStorage"
+def create_cloud():
+    if not os.path.exists(CLOUD_FOLDER):
+        os.mkdir(CLOUD_FOLDER)
+        print("Cloud folder created.")
+    else:
+        print("Cloud folder already exists.")
+def choose_folder():
+    global LOCAL_FOLDER
+    LOCAL_FOLDER = input("Enter local folder path: ").strip()
+    if os.path.exists(LOCAL_FOLDER):
+        print("Folder selected.")
+    else:
+        print("Folder not found.")
+        LOCAL_FOLDER = ""
+def sync_files():
+    if LOCAL_FOLDER == "":
+        print("Select a folder first.")
+        return
+    files = os.listdir(LOCAL_FOLDER)
+    if not files:
+        print("No files found.")
+        return
+    copied = 0
+    for file in files:
+        source = os.path.join(LOCAL_FOLDER, file)
+        destination = os.path.join(CLOUD_FOLDER, file)
+        if os.path.isfile(source):
+            shutil.copy2(source, destination)
+            copied += 1
+    print(copied, "file(s) synchronized.")
+def view_cloud():
+    if not os.path.exists(CLOUD_FOLDER):
+        print("Cloud folder does not exist.")
+        return
+    files = os.listdir(CLOUD_FOLDER)
+    if not files:
+        print("Cloud storage is empty.")
+        return
+    print("\n===== CLOUD FILES =====")
+    for file in files:
+        print("-", file)
+while True:
+    print("\n===== CLOUD SYNC APP =====")
+    print("1. Create Cloud Folder")
+    print("2. Select Local Folder")
+    print("3. Sync Files")
+    print("4. View Cloud Files")
+    print("5. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        create_cloud()
+    elif choice == "2":
+        choose_folder()
+    elif choice == "3":
+        sync_files()
+    elif choice == "4":
+        view_cloud()
+    elif choice == "5":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

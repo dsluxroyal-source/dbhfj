@@ -1,0 +1,83 @@
+import os
+FILE_NAME = "ai_tasks.txt"
+tasks = []
+def load_tasks():
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            for line in file:
+                tasks.append(line.strip())
+def save_tasks():
+    with open(FILE_NAME, "w", encoding="utf-8") as file:
+        for task in tasks:
+            file.write(task + "\n")
+def add_task():
+    name = input("Task: ").strip()
+    priority = input("Priority (High/Medium/Low): ").strip().capitalize()
+    if priority not in ["High", "Medium", "Low"]:
+        print("Invalid priority.")
+        return
+    tasks.append(f"[ ]|{priority}|{name}")
+    save_tasks()
+    print("Task added.")
+def view_tasks():
+    if not tasks:
+        print("No tasks available.")
+        return
+    order = {"High": 1, "Medium": 2, "Low": 3}
+    sorted_tasks = sorted(tasks, key=lambda x: order[x.split("|")[1]])
+    print("\n===== PRIORITY TASKS =====")
+    for number, task in enumerate(sorted_tasks, start=1):
+        status, priority, name = task.split("|")
+        print(f"{number}. {status} {name} ({priority})")
+def complete_task():
+    view_tasks()
+    if not tasks:
+        return
+    try:
+        number = int(input("Task Number: "))
+        order = {"High": 1, "Medium": 2, "Low": 3}
+        sorted_tasks = sorted(tasks, key=lambda x: order[x.split("|")[1]])
+        selected = sorted_tasks[number - 1]
+        index = tasks.index(selected)
+        status, priority, name = tasks[index].split("|")
+        tasks[index] = f"[✓]|{priority}|{name}"
+        save_tasks()
+        print("Task completed.")
+    except:
+        print("Invalid input.")
+def delete_task():
+    view_tasks()
+    if not tasks:
+        return
+    try:
+        number = int(input("Task Number: "))
+        order = {"High": 1, "Medium": 2, "Low": 3}
+        sorted_tasks = sorted(tasks, key=lambda x: order[x.split("|")[1]])
+        selected = sorted_tasks[number - 1]
+        tasks.remove(selected)
+        save_tasks()
+        print("Task deleted.")
+    except:
+        print("Invalid input.")
+load_tasks()
+while True:
+    print("\n===== AI TASK PRIORITIZATION SYSTEM =====")
+    print("1. Add Task")
+    print("2. View Tasks")
+    print("3. Complete Task")
+    print("4. Delete Task")
+    print("5. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        add_task()
+    elif choice == "2":
+        view_tasks()
+    elif choice == "3":
+        complete_task()
+    elif choice == "4":
+        delete_task()
+    elif choice == "5":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

@@ -1,0 +1,71 @@
+import cv2
+import face_recognition
+import os
+KNOWN_FACE = "authorized.jpg"
+if not os.path.exists(KNOWN_FACE):
+    print("Authorized face image not found.")
+    print("Save your face image as 'authorized.jpg'")
+    exit()
+print("Loading authorized face...")
+known_image = face_recognition.load_image_file(KNOWN_FACE)
+known_encodings = face_recognition.face_encodings(known_image)
+if len(known_encodings) == 0:
+    print("No face found in authorized.jpg")
+    exit()
+known_face_encoding = known_encodings[0]
+camera = cv2.VideoCapture(0)
+if not camera.isOpened():
+    print("Cannot open webcam.")
+    exit()
+print("\nFace Recognition Login System")
+print("Press Q to quit.\n")
+login_success = False
+while True:
+    success, frame = camera.read()
+    if not success:
+        print("Failed to capture frame.")
+        break
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(
+        rgb_frame,
+        face_locations
+    )
+    for (top, right, bottom, left), face_encoding in zip(
+            face_locations,
+            face_encodings):
+        match = face_recognition.compare_faces(
+            [known_face_encoding],
+            face_encoding
+        )
+        if match[0]:
+            color = (0, 255, 0)
+            text = "ACCESS GRANTED"
+            login_success = True
+        else:
+            color = (0, 0, 255)
+            text = "ACCESS DENIED"
+        cv2.rectangle(
+            frame,
+            (left, top),
+            (right, bottom),
+            color,
+            2
+        )
+        cv2.putText(
+            frame,
+            text,
+            (left, top - 10),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            color,
+            2
+        )
+    cv2.imshow("Face Recognition Login", frame)
+    if login_success:
+        print("Login Successful!")
+        break
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+camera.release()
+cv2.destroyAllWindows()

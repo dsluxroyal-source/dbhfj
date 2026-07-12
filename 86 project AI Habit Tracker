@@ -1,0 +1,63 @@
+import os
+FILE_NAME = "habits.txt"
+habits = []
+def load_habits():
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            for line in file:
+                habits.append(line.strip())
+def save_habits():
+    with open(FILE_NAME, "w", encoding="utf-8") as file:
+        for habit in habits:
+            file.write(habit + "\n")
+def add_habit():
+    habit = input("Enter habit: ").strip()
+    if habit:
+        habits.append("[ ] " + habit)
+        save_habits()
+        print("Habit added.")
+    else:
+        print("Habit cannot be empty.")
+def view_habits():
+    if not habits:
+        print("No habits found.")
+        return
+    print("\n===== HABITS =====")
+    for number, habit in enumerate(habits, start=1):
+        print(f"{number}. {habit}")
+def complete_habit():
+    view_habits()
+    if not habits:
+        return
+    try:
+        number = int(input("Habit number: "))
+        if 1 <= number <= len(habits):
+            if habits[number - 1].startswith("[ ]"):
+                habits[number - 1] = habits[number - 1].replace("[ ]", "[✓]", 1)
+                save_habits()
+                print("Habit completed.")
+            else:
+                print("Habit already completed.")
+        else:
+            print("Invalid habit number.")
+    except ValueError:
+        print("Enter a valid number.")
+load_habits()
+while True:
+    print("\n===== AI HABIT TRACKER =====")
+    print("1. Add Habit")
+    print("2. View Habits")
+    print("3. Complete Habit")
+    print("4. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        add_habit()
+    elif choice == "2":
+        view_habits()
+    elif choice == "3":
+        complete_habit()
+    elif choice == "4":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")

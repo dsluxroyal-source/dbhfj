@@ -1,0 +1,30 @@
+import feedparser
+from bs4 import BeautifulSoup
+def read_news():
+    url = input("Enter RSS Feed URL: ")
+    try:
+        feed = feedparser.parse(url)
+        if not feed.entries:
+            print("No news articles found.")
+            return
+        print("\n===== Latest News =====\n")
+        for i, article in enumerate(feed.entries[:10], start=1):
+            print(f"{i}. {article.title}")
+            if hasattr(article, "summary"):
+                summary = BeautifulSoup(article.summary, "html.parser").get_text()
+                print("Summary:", summary)
+            print("-" * 50)
+    except Exception as e:
+        print("Error:", e)
+while True:
+    print("\n===== Jarvis News Reader =====")
+    print("1. Read News")
+    print("2. Exit")
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        read_news()
+    elif choice == "2":
+        print("Jarvis shutting down...")
+        break
+    else:
+        print("Invalid choice. Try again.")

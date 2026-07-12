@@ -1,0 +1,52 @@
+from PIL import Image
+def resize_image():
+    file = input("Image Path: ")
+    try:
+        image = Image.open(file)
+        width = int(input("Width: "))
+        height = int(input("Height: "))
+        resized = image.resize((width, height))
+        output = "resized_" + file.split("\\")[-1]
+        resized.save(output)
+        print("Saved as", output)
+    except Exception as e:
+        print("Error:", e)
+def rotate_image():
+    file = input("Image Path: ")
+    try:
+        image = Image.open(file)
+        angle = int(input("Rotation Angle: "))
+        rotated = image.rotate(angle)
+        output = "rotated_" + file.split("\\")[-1]
+        rotated.save(output)
+        print("Saved as", output)
+    except Exception as e:
+        print("Error:", e)
+def grayscale_image():
+    file = input("Image Path: ")
+    try:
+        image = Image.open(file)
+        gray = image.convert("L")
+        output = "gray_" + file.split("\\")[-1]
+        gray.save(output)
+        print("Saved as", output)
+    except Exception as e:
+        print("Error:", e)
+while True:
+    print("\n===== MULTIMEDIA EDITING ASSISTANT =====")
+    print("1. Resize Image")
+    print("2. Rotate Image")
+    print("3. Grayscale Image")
+    print("4. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        resize_image()
+    elif choice == "2":
+        rotate_image()
+    elif choice == "3":
+        grayscale_image()
+    elif choice == "4":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option.")
